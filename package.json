@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "repository": "aniftyco/plebpack",
+  "author": {
+    "name": "Nifty Development, LLC",
+    "email": "support@aniftyco.com",
+    "url": "https://aniftyco.com"
+  },
+  "contributors": [
+    {
+      "name": "Josh Manders",
+      "url": "https://twitter.com/joshmanders"
+    }
+  ],
+  "scripts": {
+    "build": "node scripts build",
+    "prepublish": "node scripts build",
+    "publish": "lerna publish"
+  },
+  "workspaces": [
+    "packages/*",
+    "example/"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "chalk": "^2.4.1",
+    "commander": "^2.19.0",
+    "eslint": "^5.7.0",
+    "eslint-config-nifty": "^1.1.1",
+    "glob": "^7.1.3",
+    "jest": "^23.6.0",
+    "lerna": "^3.4.3",
+    "mkdirp": "^0.5.1",
+    "prettier": "^1.14.3",
+    "string-length": "^2.0.0"
+  }
+}
