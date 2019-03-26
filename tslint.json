@@ -1,0 +1,15 @@
+{
+  "extends": ["tslint-config-nifty"],
+  "rules": {
+    "no-parameter-properties": false,
+    "interface-name": false,
+    "no-default-export": false,
+    "export-name": false,
+    "completed-docs": false,
+    "no-relative-imports": false,
+    "no-any": false
+  },
+  "jsRules": {
+    "object-literal-sort-keys": false
+  }
+}

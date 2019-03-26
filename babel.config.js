@@ -3,6 +3,7 @@ module.exports = (babel) => {
 
   return {
     presets: [
+      '@babel/typescript',
       [
         '@babel/env',
         {
