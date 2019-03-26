@@ -33,8 +33,9 @@ const getBuildPath = (file, folder) => {
   const pkgSrcPath = resolve(PACKAGES_DIR, pkgName, SRC_DIR);
   const pkgBuildPath = resolve(PACKAGES_DIR, pkgName, folder);
   const relativeToSrcPath = relative(pkgSrcPath, file);
+  const destPath = resolve(pkgBuildPath, relativeToSrcPath);
 
-  return resolve(pkgBuildPath, relativeToSrcPath);
+  return `${destPath.substr(0, destPath.lastIndexOf('.'))}.js`;
 };
 
 const adjustToTerminalWidth = (str, width, char = '.') => {
