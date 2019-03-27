@@ -1,5 +1,5 @@
 const {resolve, dirname, relative, sep: SEPARATOR} = require('path');
-const {lstatSync, readdirSync, writeFileSync} = require('fs');
+const {lstatSync, readdirSync, writeFileSync, existsSync} = require('fs');
 const {sync: glob} = require('glob');
 const {sync: mkdirp} = require('mkdirp');
 const {transformFileSync: babel} = require('@babel/core');
@@ -81,6 +81,8 @@ const buildPackage = (pkg) => {
   process.stdout.write(` ${DONE}\n`);
 };
 
+const packagesWithTs = getPackages().filter((p) => existsSync(resolve(p, 'tsconfig.json')));
+
 const exists = (filename) => {
   try {
     return lstatSync(filename).isFile();
@@ -105,4 +107,5 @@ module.exports = {
   adjustToTerminalWidth,
   exists,
   getTerminalWidth,
+  packagesWithTs,
 };

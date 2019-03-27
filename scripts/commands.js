@@ -1,5 +1,6 @@
 const {resolve, relative} = require('path');
 const {accessSync, watch, unlinkSync, F_OK} = require('fs');
+const {execSync} = require('child_process');
 const chalk = require('chalk');
 const {
   COLUMNS,
@@ -12,7 +13,31 @@ const {
   adjustToTerminalWidth,
   exists,
   getTerminalWidth,
+  packagesWithTs,
 } = require('./utils');
+
+const buildTypes = () => {
+  const DONE = chalk.green('DONE');
+
+  const args = [
+    '--max-old-space-size=4096',
+    resolve(require.resolve('typescript/package.json'), '..', require('typescript/package.json').bin.tsc),
+    '-b',
+    ...packagesWithTs,
+  ];
+
+  process.stdout.write(`${chalk.inverse('Building TypeScript definition files')}\n`);
+  process.stdout.write(adjustToTerminalWidth('Building\n', getTerminalWidth(DONE) - 2));
+
+  try {
+    args.unshift('node');
+
+    execSync(args.join(' '), {stdio: 'inherit'});
+  } catch (err) {
+    process.stderr.write(err.stack);
+    process.exit(1);
+  }
+};
 
 const buildCommand = () => {
   process.stdout.write(chalk.magenta('\n Building Packages\n'.toUpperCase()));
@@ -96,4 +121,5 @@ const watchCommand = () => {
 module.exports = {
   build: buildCommand,
   watch: watchCommand,
+  ts: buildTypes,
 };
