@@ -1,6 +1,7 @@
 const config = require('plebpack');
-const {entry, output} = require('plebpack/lib/plugins');
+const {entry, output} = require('plebpack/hooks');
 
-config.use([entry('./scripts/index.js'), output('./build/bundle.js')]);
+config.use(entry('app', './scripts/index.js'));
+config.use(output('./build/bundle.js'));
 
 module.exports = config;
