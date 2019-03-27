@@ -3,7 +3,6 @@ module.exports = (babel) => {
 
   return {
     presets: [
-      '@babel/typescript',
       [
         '@babel/env',
         {
@@ -12,7 +11,12 @@ module.exports = (babel) => {
           },
         },
       ],
+      '@babel/typescript',
     ],
-    plugins: ['add-module-exports'],
+    plugins: [
+      ['@babel/proposal-object-rest-spread', {useBuiltIns: true}],
+      ['@babel/proposal-class-properties'],
+      'add-module-exports',
+    ],
   };
 };

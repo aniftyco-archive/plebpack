@@ -2,6 +2,10 @@
   "name": "plebpack",
   "version": "0.1.0",
   "main": "lib/index.js",
-  "dependencies": {},
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "pkg-up": "^3.0.1"
+  },
   "devDependencies": {}
 }
