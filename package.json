@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "node scripts build",
-    "prepublish": "node scripts build",
+    "prepublish": "node scripts build && node scripts build --types",
     "publish": "lerna publish",
     "test": "jest"
   },
