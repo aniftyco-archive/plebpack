@@ -1,35 +1,45 @@
 import {flatten} from 'lodash';
 import {Configurator} from './configurator';
 
+export interface IOutputOptions {
+  path: string;
+  filename: string;
+}
+
 export interface IPlebpack {
-  use(...hooks: Function[]): this;
+  context: string;
+  use(...hooks: Function[]): void;
   addEntry(name: string, path: string): void;
+  setOutput(options: IOutputOptions): void;
+  setContext(context: string): void;
   addAlias(alias: string, path: string): void;
   addPlugin(plugin: any, priority: number): void;
   addLoader(loader: any): void;
   addExtension(extension: string): void;
+  addExternal(name: string, path: string): void;
   addResolvePath(path: string): void;
-  merge(config: object): void;
+  merge(config: object | Function): void;
 }
 
 export class Plebpack implements IPlebpack {
   private hooks: Set<Function> = new Set();
-  protected entries: Map<string, string> = new Map();
-  protected aliases: Map<string, string> = new Map();
-  protected plugins: Set<{plugin: any; priority: number}> = new Set();
-  protected loaders: Set<any> = new Set();
-  protected extensions: Set<string> = new Set();
-  protected resolvePaths: Set<string> = new Set();
-  protected config: object = {};
+  public context: string = process.cwd();
+  public entries: Map<string, string> = new Map();
+  public output?: IOutputOptions;
+  public aliases: Map<string, string> = new Map();
+  public plugins: Set<{plugin: any; priority: number}> = new Set();
+  public loaders: Set<any> = new Set();
+  public extensions: Set<string> = new Set();
+  public resolvePaths: Set<string> = new Set();
+  public externals: Map<string, string> = new Map();
+  public config: object = {};
 
   constructor(public pkg?: string | null) {}
 
-  public use(...hooks: Function[]): this {
+  public use(...hooks: Function[]): void {
     flatten(hooks).forEach((hook: Function) => {
       this.hooks.add(hook);
     });
-
-    return this;
   }
 
   public addEntry(name: string, path: string): void {
@@ -38,6 +48,14 @@ export class Plebpack implements IPlebpack {
     }
 
     this.entries.set(name, path);
+  }
+
+  public setOutput(output: IOutputOptions) {
+    this.output = output;
+  }
+
+  public setContext(context: string) {
+    this.context = context;
   }
 
   public addAlias(alias: string, path: string): void {
@@ -59,16 +77,28 @@ export class Plebpack implements IPlebpack {
     this.resolvePaths.add(path);
   }
 
-  public merge(config: object): void {
-    this.config = {
-      ...(this.config as any),
-      ...(config as any),
-    };
+  public addExternal(name: string, path: string): void {
+    if (this.externals.has(name)) {
+      throw new Error(`Duplicate name "${name}". Externals must be unique.`);
+    }
+
+    this.externals.set(name, path);
   }
 
-  public toConfig(env: string, options: object): object {
+  public merge(config: object | Function): void {
+    if (typeof config === 'function') {
+      this.config = config(this.config);
+    } else {
+      this.config = {
+        ...(this.config as any),
+        ...(config as any),
+      };
+    }
+  }
+
+  public toConfig(mode: string, options: object): object {
     this.hooks.forEach((hook: Function) => hook(this));
 
-    return new Configurator(this, env, options).build();
+    return new Configurator(this, mode, options).build();
   }
 }

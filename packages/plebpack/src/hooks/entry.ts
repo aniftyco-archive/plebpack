@@ -1,5 +1,6 @@
+import {resolve} from 'path';
 import {IPlebpack} from '../plebpack';
 
-export const entry = (name: string, path: string): Function => (plebpack: IPlebpack): void => {
-  plebpack.addEntry(name, path);
+export default (name: string, path: string): Function => (plebpack: IPlebpack): void => {
+  plebpack.addEntry(name, resolve(plebpack.context, path));
 };
