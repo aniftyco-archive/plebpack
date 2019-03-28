@@ -1,11 +1,26 @@
 {
   "name": "plebpack",
+  "description": "Webpack for the common people.",
   "version": "0.1.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": "aniftyco/plebpack",
+  "author": {
+    "name": "Nifty Development, LLC",
+    "email": "support@aniftyco.com",
+    "url": "https://aniftyco.com"
+  },
+  "contributors": [
+    {
+      "name": "Josh Manders",
+      "url": "https://twitter.com/joshmanders"
+    }
+  ],
   "dependencies": {
     "lodash": "^4.17.11",
     "pkg-up": "^3.0.1"
   },
-  "devDependencies": {}
+  "peerDependencies": {
+    "webpack": "^4.29.6"
+  }
 }
