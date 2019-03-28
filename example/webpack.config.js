@@ -1,7 +1,10 @@
+const {resolve} = require('path');
 const config = require('plebpack');
-const {entry, output} = require('plebpack/hooks');
+const {context, entry, output, loader, plugin} = require('plebpack/hooks');
 
-config.use(entry('app', './scripts/index.js'));
-config.use(output('./build/bundle.js'));
+config.use(context(resolve(__dirname, 'scripts')));
+config.use(entry('app', './index.js'));
+config.use(entry('admin', './admin.js'));
+config.use(output('./build/[name].[contentHash:8].js'));
 
 module.exports = config;
