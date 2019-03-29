@@ -1,7 +1,8 @@
 import flatten from 'lodash.flatten';
+import {Output as IWebpackOutputOptions} from 'webpack';
 import {Configuration} from './configuration';
 
-export interface IOutputOptions {
+export interface IOutputOptions extends IWebpackOutputOptions {
   path: string;
   filename: string;
 }
