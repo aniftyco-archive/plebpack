@@ -1,5 +1,5 @@
-import {flatten} from 'lodash';
-import {Configurator} from './configurator';
+import flatten from 'lodash.flatten';
+import {Configuration} from './configuration';
 
 export interface IOutputOptions {
   path: string;
@@ -32,7 +32,7 @@ export class Plebpack implements IPlebpack {
   public extensions: Set<string> = new Set();
   public resolvePaths: Set<string> = new Set();
   public externals: Map<string, string> = new Map();
-  public config: object = {};
+  public configs: Set<Function> = new Set();
 
   constructor(public pkg?: string | null) {}
 
@@ -87,18 +87,15 @@ export class Plebpack implements IPlebpack {
 
   public merge(config: object | Function): void {
     if (typeof config === 'function') {
-      this.config = config(this.config);
-    } else {
-      this.config = {
-        ...(this.config as any),
-        ...(config as any),
-      };
+      this.configs.add(config);
     }
+
+    this.configs.add((c: object) => ({...c, ...config}));
   }
 
   public toConfig(mode: string, options: object): object {
     this.hooks.forEach((hook: Function) => hook(this));
 
-    return new Configurator(this, mode, options).build();
+    return new Configuration(this, mode, options).build();
   }
 }

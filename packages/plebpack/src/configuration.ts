@@ -1,9 +1,16 @@
+import FriendlyErrors from 'friendly-errors-webpack-plugin';
 import {Plebpack} from './plebpack';
 
-export class Configurator {
-  constructor(protected config: Plebpack, protected mode: string, protected options: object) {}
+export class Configuration {
+  constructor(protected config: Plebpack, protected mode: string, protected options: object) {
+    this.config.addPlugin(new FriendlyErrors());
+  }
 
   private entry(): any {
+    if (this.config.entries.size < 1) {
+      throw new Error('No entry specified.');
+    }
+
     const entry: any = {};
 
     this.config.entries.forEach((path: string, name: string) => {
@@ -11,6 +18,14 @@ export class Configurator {
     });
 
     return entry;
+  }
+
+  private output(): any {
+    if (!this.config.output) {
+      throw new Error('No output specified.');
+    }
+
+    return this.config.output;
   }
 
   private rules(): object[] {
@@ -85,12 +100,12 @@ export class Configurator {
   }
 
   public build(): object {
-    const config = {
+    let config = {
       context: this.config.context,
       mode: this.mode || 'development',
       devtool: 'source-map',
       entry: this.entry(),
-      output: this.config.output,
+      output: this.output(),
       module: {
         rules: this.rules(),
       },
@@ -109,6 +124,10 @@ export class Configurator {
     if (this.mode === 'development') {
       config.devtool = 'inline-source-map';
     }
+
+    this.config.configs.forEach((callback: Function) => {
+      config = callback(config);
+    });
 
     return config;
   }

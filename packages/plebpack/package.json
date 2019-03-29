@@ -17,10 +17,15 @@
     }
   ],
   "dependencies": {
-    "lodash": "^4.17.11",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "lodash.flatten": "^4.4.0",
     "pkg-up": "^3.0.1"
   },
   "peerDependencies": {
     "webpack": "^4.29.6"
+  },
+  "devDependencies": {
+    "@types/friendly-errors-webpack-plugin": "^0.1.1",
+    "@types/lodash.flatten": "^4.4.6"
   }
 }
