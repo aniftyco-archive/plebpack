@@ -1,0 +1,6 @@
+{
+  "extends": "../tslint.json",
+  "rules": {
+    "mocha-no-side-effect-code": false
+  }
+}

@@ -9,7 +9,8 @@
     "no-relative-imports": false,
     "no-any": false,
     "prefer-type-cast": false,
-    "no-parameter-reassignment": false
+    "no-parameter-reassignment": false,
+    "import-name": false
   },
   "jsRules": {
     "object-literal-sort-keys": false
