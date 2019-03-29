@@ -1,4 +1,5 @@
 import FriendlyErrors from 'friendly-errors-webpack-plugin';
+import {Output, Plugin, RuleSetRule} from 'webpack';
 import {Plebpack} from './plebpack';
 
 export class Configuration {
@@ -20,7 +21,7 @@ export class Configuration {
     return entry;
   }
 
-  private output(): any {
+  private output(): Output {
     if (!this.config.output) {
       throw new Error('No output specified.');
     }
@@ -28,8 +29,8 @@ export class Configuration {
     return this.config.output;
   }
 
-  private rules(): object[] {
-    const loaders: object[] = [];
+  private rules(): RuleSetRule[] {
+    const loaders: RuleSetRule[] = [];
 
     this.config.loaders.forEach((loader) => {
       loaders.push(loader);
@@ -38,7 +39,7 @@ export class Configuration {
     return loaders;
   }
 
-  private plugins(): any[] {
+  private plugins(): Plugin[] {
     const plugins: any[] = [];
 
     this.config.plugins.forEach((plugin, position) => {

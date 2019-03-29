@@ -1,5 +1,5 @@
 import flatten from 'lodash.flatten';
-import {Output as IWebpackOutputOptions} from 'webpack';
+import {Output as IWebpackOutputOptions, Plugin, RuleSetRule} from 'webpack';
 import {Configuration} from './configuration';
 
 export interface IOutputOptions extends IWebpackOutputOptions {
@@ -14,8 +14,8 @@ export interface IPlebpack {
   setOutput(options: IOutputOptions): void;
   setContext(context: string): void;
   addAlias(alias: string, path: string): void;
-  addPlugin(plugin: any, priority: number): void;
-  addLoader(loader: any): void;
+  addPlugin(plugin: Plugin, priority: number): void;
+  addLoader(loader: RuleSetRule): void;
   addExtension(extension: string): void;
   addExternal(name: string, path: string): void;
   addResolvePath(path: string): void;
@@ -28,8 +28,8 @@ export class Plebpack implements IPlebpack {
   public entries: Map<string, string> = new Map();
   public output?: IOutputOptions;
   public aliases: Map<string, string> = new Map();
-  public plugins: Set<{plugin: any; priority: number}> = new Set();
-  public loaders: Set<any> = new Set();
+  public plugins: Set<{plugin: Plugin; priority: number}> = new Set();
+  public loaders: Set<RuleSetRule> = new Set();
   public extensions: Set<string> = new Set();
   public resolvePaths: Set<string> = new Set();
   public externals: Map<string, string> = new Map();
@@ -63,11 +63,11 @@ export class Plebpack implements IPlebpack {
     this.aliases.set(alias, path);
   }
 
-  public addPlugin(plugin: any, priority: number = 0): void {
+  public addPlugin(plugin: Plugin, priority: number = 0): void {
     this.plugins.add({plugin, priority});
   }
 
-  public addLoader(loader: any): void {
+  public addLoader(loader: RuleSetRule): void {
     this.loaders.add(loader);
   }
 
