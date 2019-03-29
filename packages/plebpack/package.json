@@ -16,6 +16,10 @@
       "url": "https://twitter.com/joshmanders"
     }
   ],
+  "files": [
+    "lib/",
+    "hooks.js"
+  ],
   "dependencies": {
     "friendly-errors-webpack-plugin": "^1.7.0",
     "lodash.flatten": "^4.4.0",
