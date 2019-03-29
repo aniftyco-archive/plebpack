@@ -1,16 +1,17 @@
 # Plebpack
+
 > Webpack configuration for the common people.
 
 ## Example
 
-*webpack.config.js*
+_webpack.config.js_
+
 ```js
 const config = require('plebpack');
-const entry = require('@plebpack/entry');
-const output = require('@plebpack/output');
+const {entry, output} = require('plebpack/hooks');
 
 config.use(entry('./example/index.js'));
-config.use(output('./example/bundle.js'));
+config.use(output('./example/[name].js'));
 
 module.exports = config;
 ```
