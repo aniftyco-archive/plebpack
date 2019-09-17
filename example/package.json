@@ -6,7 +6,7 @@
     "build": "webpack --config webpack.config.js"
   },
   "devDependencies": {
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9"
   }
 }
