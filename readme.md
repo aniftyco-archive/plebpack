@@ -4,14 +4,13 @@
 
 ## Example
 
-_webpack.config.js_
+_webpack.config.ts_
 
-```js
-const config = require('plebpack');
-const {entry, output} = require('plebpack/hooks');
+```ts
+import config, {entry, output} from 'plebpack';
 
 config.use(entry('./example/index.js'));
 config.use(output('./example/[name].js'));
 
-module.exports = config;
+export default config;
 ```

@@ -1,9 +1,11 @@
 import FriendlyErrors from 'friendly-errors-webpack-plugin';
-import {Output, Plugin, RuleSetRule} from 'webpack';
+import {Configuration as WebpackConfiguration, Output, Plugin, RuleSetRule} from 'webpack';
 import {Plebpack} from './plebpack';
 
+export type ConfigurationMode = 'development' | 'production' | 'none';
+
 export class Configuration {
-  constructor(protected config: Plebpack, protected mode: string, protected options: object) {
+  constructor(protected config: Plebpack, protected mode: ConfigurationMode, protected options: object) {
     this.config.addPlugin(new FriendlyErrors());
   }
 
@@ -100,8 +102,8 @@ export class Configuration {
     return modules;
   }
 
-  public build(): object {
-    let config = {
+  public build(): WebpackConfiguration {
+    let config: WebpackConfiguration = {
       context: this.config.context,
       mode: this.mode || 'development',
       devtool: 'source-map',

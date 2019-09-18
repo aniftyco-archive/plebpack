@@ -10,7 +10,9 @@
     "no-any": false,
     "prefer-type-cast": false,
     "no-parameter-reassignment": false,
-    "import-name": false
+    "import-name": false,
+    "strict-boolean-expressions": false,
+    "no-unsafe-any": false
   },
   "jsRules": {
     "object-literal-sort-keys": false

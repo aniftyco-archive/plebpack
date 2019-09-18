@@ -1,11 +1,12 @@
 {
-  "name": "example",
+  "name": "example-basic",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack"
   },
   "devDependencies": {
+    "ts-node": "^8.4.1",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"
   }

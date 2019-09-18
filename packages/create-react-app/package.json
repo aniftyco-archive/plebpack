@@ -1,6 +1,6 @@
 {
-  "name": "plebpack",
-  "description": "Webpack for the common people.",
+  "name": "@plebpack/create-react-app",
+  "description": "Create React App without ejecting, for Plebpack",
   "version": "0.1.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -19,16 +19,7 @@
   "files": [
     "lib/"
   ],
-  "dependencies": {
-    "friendly-errors-webpack-plugin": "^1.7.0",
-    "lodash.flatten": "^4.4.0",
-    "pkg-up": "^3.0.1"
-  },
-  "peerDependencies": {
-    "webpack": "^4.29.6"
-  },
-  "devDependencies": {
-    "@types/friendly-errors-webpack-plugin": "^0.1.1",
-    "@types/lodash.flatten": "^4.4.6"
-  }
+  "dependencies": {},
+  "peerDependencies": {},
+  "devDependencies": {}
 }

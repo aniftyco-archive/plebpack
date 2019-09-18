@@ -1,10 +1,14 @@
 import flatten from 'lodash.flatten';
 import {Output as IWebpackOutputOptions, Plugin, RuleSetRule} from 'webpack';
-import {Configuration} from './configuration';
+import {Configuration, ConfigurationMode} from './configuration';
 
 export interface IOutputOptions extends IWebpackOutputOptions {
   path: string;
   filename: string;
+}
+
+export interface IGenericObject {
+  [key: string]: any;
 }
 
 export interface IPlebpack {
@@ -19,16 +23,21 @@ export interface IPlebpack {
   addExtension(extension: string): void;
   addExternal(name: string, path: string): void;
   addResolvePath(path: string): void;
-  merge(config: object | Function): void;
+  merge(config: IGenericObject | Function): void;
+}
+
+export interface IPluginSet {
+  plugin: Plugin;
+  priority: number;
 }
 
 export class Plebpack implements IPlebpack {
-  private hooks: Set<Function> = new Set();
+  private readonly hooks: Set<Function> = new Set();
   public context: string = process.cwd();
   public entries: Map<string, string> = new Map();
   public output?: IOutputOptions;
   public aliases: Map<string, string> = new Map();
-  public plugins: Set<{plugin: Plugin; priority: number}> = new Set();
+  public plugins: Set<IPluginSet> = new Set();
   public loaders: Set<RuleSetRule> = new Set();
   public extensions: Set<string> = new Set();
   public resolvePaths: Set<string> = new Set();
@@ -86,16 +95,18 @@ export class Plebpack implements IPlebpack {
     this.externals.set(name, path);
   }
 
-  public merge(config: object | Function): void {
+  public merge(config: IGenericObject | Function): void {
     if (typeof config === 'function') {
       this.configs.add(config);
     }
 
-    this.configs.add((c: object) => ({...c, ...config}));
+    this.configs.add((c: IGenericObject) => ({...c, ...config}));
   }
 
-  public toConfig(mode: string, options: object): object {
-    this.hooks.forEach((hook: Function) => hook(this));
+  public toConfig(mode: ConfigurationMode, options: IGenericObject): IGenericObject {
+    this.hooks.forEach((hook: Function) => {
+      hook(this);
+    });
 
     return new Configuration(this, mode, options).build();
   }
