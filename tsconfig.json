@@ -1,21 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "lib": ["es2017"],
-    "declaration": true,
-    "composite": true,
-    "emitDeclarationOnly": true,
-    "strict": true,
-    /* Additional Checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    /* Module Resolution Options */
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+    "composite": true
   },
-  "exclude": ["tests/**/*", "**/lib/**/*"]
+  "files": [],
+  "include": [],
+  "references": [{"path": "./tsconfig.build.json"}]
 }

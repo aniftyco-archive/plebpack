@@ -5,7 +5,7 @@ import entry from './hooks/entry';
 import loader from './hooks/loader';
 import output from './hooks/output';
 import plugin from './hooks/plugin';
-import {Plebpack} from './plebpack';
+import {IPlebpack, Plebpack} from './plebpack';
 
 const plebpack = new Plebpack(pkgJson());
 
@@ -17,6 +17,8 @@ const config = (
 };
 
 config.use = plebpack.use.bind(plebpack);
+
+export {IPlebpack};
 
 export {config, context, entry, loader, output, plugin};
 

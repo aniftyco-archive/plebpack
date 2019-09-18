@@ -6,6 +6,7 @@
     "build": "webpack"
   },
   "devDependencies": {
+    "plebpack": "*",
     "ts-node": "^8.4.1",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"

@@ -2,8 +2,8 @@
   "name": "@plebpack/create-react-app",
   "description": "Create React App without ejecting, for Plebpack",
   "version": "0.1.1",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": "aniftyco/plebpack",
   "author": {
     "name": "Nifty Development, LLC",
@@ -17,9 +17,11 @@
     }
   ],
   "files": [
-    "lib/"
+    "./dist/"
   ],
   "dependencies": {},
-  "peerDependencies": {},
+  "peerDependencies": {
+    "plebpack": "*"
+  },
   "devDependencies": {}
 }

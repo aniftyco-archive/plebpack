@@ -2,8 +2,8 @@
   "name": "plebpack",
   "description": "Webpack for the common people.",
   "version": "0.1.1",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": "aniftyco/plebpack",
   "author": {
     "name": "Nifty Development, LLC",
@@ -17,7 +17,7 @@
     }
   ],
   "files": [
-    "lib/"
+    "./dist/"
   ],
   "dependencies": {
     "friendly-errors-webpack-plugin": "^1.7.0",

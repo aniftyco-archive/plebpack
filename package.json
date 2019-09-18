@@ -13,8 +13,8 @@
     }
   ],
   "scripts": {
-    "build": "node scripts build",
-    "prepublish": "node scripts build && node scripts build --types",
+    "build": "tsc --build tsconfig.build.json",
+    "prepublishOnly": "yarn build",
     "publish": "lerna publish",
     "test": "jest"
   },
