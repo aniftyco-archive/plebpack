@@ -1,6 +1,6 @@
 {
-  "name": "@plebpack/create-react-app",
-  "description": "Create React App without ejecting, for Plebpack",
+  "name": "@plebpack/react",
+  "description": "Run a modern web app",
   "version": "0.1.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
