@@ -1,6 +1,7 @@
 {
   "extends": ["../tslint.json"],
   "rules": {
-    "no-implicit-dependencies": false
+    "no-implicit-dependencies": false,
+    "match-default-export-name": false
   }
 }
