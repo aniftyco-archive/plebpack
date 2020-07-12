@@ -1,13 +1,22 @@
-import { resolve } from 'path';
+import { resolve, dirname, basename } from 'path';
 import { Plebpack } from '../plebpack';
+import { Hook } from '../hook';
 
-export default (name: string, path?: string): Function => (
-  plebpack: Plebpack
-): void => {
+export function entry(path: string): Hook;
+export function entry(name: string, path?: string): Hook {
   if (!path) {
     path = name;
     name = 'bundle';
   }
 
-  plebpack.addEntry(name, resolve(plebpack.context, path));
-};
+  return (plebpack: Plebpack): void => {
+    const context = plebpack.getContext();
+    const file = resolve(`${context}/${path}`);
+    const filename = basename(file);
+    const directory = dirname(file);
+
+    plebpack.setContext(directory);
+
+    plebpack.addEntry(name, `./${filename}`);
+  };
+}

@@ -1,5 +1,8 @@
 import { Plebpack } from '../plebpack';
+import { Hook } from '../hook';
 
-export default (path: string): Function => (plebpack: Plebpack): void => {
-  plebpack.setContext(path);
-};
+export function context(path: string): Hook {
+  return (plebpack: Plebpack): void => {
+    plebpack.setContext(path);
+  };
+}

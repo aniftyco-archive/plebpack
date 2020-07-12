@@ -1,15 +1,19 @@
 import { basename, dirname, resolve } from 'path';
-import { OutputOptions, Plebpack } from '../plebpack';
+import { Output as WebpackOutputOptions } from 'webpack';
+import { Plebpack } from '../plebpack';
+import { Hook } from '../hook';
 
-export default (options: OutputOptions | string): Function => (
-  plebpack: Plebpack
-): void => {
-  if (typeof options === 'string') {
-    options = {
-      filename: basename(options),
-      path: resolve(process.cwd(), dirname(options)),
-    };
-  }
+export function output(file: string): Hook;
+export function output(options: WebpackOutputOptions): Hook;
+export function output(options: any): Hook {
+  return (plebpack: Plebpack): void => {
+    if (typeof options === 'string') {
+      options = {
+        filename: basename(options),
+        path: resolve(process.cwd(), dirname(options)),
+      };
+    }
 
-  plebpack.setOutput(options);
-};
+    plebpack.setOutput(options);
+  };
+}

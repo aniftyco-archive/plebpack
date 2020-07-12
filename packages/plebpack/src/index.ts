@@ -1,25 +1,25 @@
 import { sync as pkgJson } from 'pkg-up';
 import { ConfigurationMode } from './configuration';
-import context from './hooks/context';
-import entry from './hooks/entry';
-import loader from './hooks/loader';
-import output from './hooks/output';
-import plugin from './hooks/plugin';
+import { context } from './hooks/context';
+import { entry } from './hooks/entry';
+import { loader } from './hooks/loader';
+import { output } from './hooks/output';
+import { plugin } from './hooks/plugin';
 import { Plebpack } from './plebpack';
+import { Hook } from './hook';
 
 const plebpack = new Plebpack(pkgJson());
 
 const config = (
   env = (process.env.NODE_ENV ||
     process.env.PLEBPACK_ENV ||
-    'development') as ConfigurationMode,
-  options: object = {}
+    'development') as ConfigurationMode
 ) => {
-  return plebpack.toConfig(env, options);
+  return plebpack.config(env);
 };
 
 config.use = plebpack.use.bind(plebpack);
 
-export { Plebpack, config, context, entry, loader, output, plugin };
+export { Plebpack, Hook, config, context, entry, loader, output, plugin };
 
 export default config;

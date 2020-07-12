@@ -1,22 +1,19 @@
 import flatten from 'lodash.flatten';
 import { Output as WebpackOutputOptions, Plugin, RuleSetRule } from 'webpack';
 import { Configuration, ConfigurationMode } from './configuration';
-
-export type OutputOptions = WebpackOutputOptions & {
-  path: string;
-  filename: string;
-};
+import { Hook } from './hook';
 
 export type PluginSet = {
   plugin: Plugin;
   priority: number;
+  position?: number;
 };
 
 export class Plebpack {
-  private readonly hooks: Set<Function> = new Set();
-  public context: string = process.cwd();
+  private readonly hooks: Set<Hook> = new Set();
+  private context: string = process.cwd();
   private entries: Map<string, string> = new Map();
-  private output?: OutputOptions;
+  private output?: WebpackOutputOptions;
   private aliases: Map<string, string> = new Map();
   private plugins: Set<PluginSet> = new Set();
   private loaders: Set<RuleSetRule> = new Set();
@@ -31,8 +28,8 @@ export class Plebpack {
     return this.pkg;
   }
 
-  public use(...hooks: Function[]): void {
-    flatten(hooks).forEach((hook: Function) => {
+  public use(...hooks: Hook[]): void {
+    flatten(hooks).forEach((hook: Hook) => {
       this.hooks.add(hook);
     });
   }
@@ -46,14 +43,28 @@ export class Plebpack {
   }
 
   public getEntries() {
-    return this.entries;
+    if (this.entries.size === 0) {
+      throw new Error('No entry specified.');
+    }
+
+    const entries: Record<string, any> = {};
+
+    this.entries.forEach((path: string, name: string) => {
+      entries[name] = path;
+    });
+
+    return entries;
   }
 
-  public setOutput(output: OutputOptions) {
+  public setOutput(output: WebpackOutputOptions) {
     this.output = output;
   }
 
   public getOutput() {
+    if (!this.output) {
+      throw new Error('Not output specified.');
+    }
+
     return this.output;
   }
 
@@ -61,12 +72,22 @@ export class Plebpack {
     this.context = context;
   }
 
+  public getContext() {
+    return this.context;
+  }
+
   public addAlias(alias: string, path: string): void {
     this.aliases.set(alias, path);
   }
 
   public getAliases() {
-    return this.aliases;
+    const aliases: Record<string, any> = {};
+
+    this.aliases.forEach((path: string, name: string) => {
+      aliases[name] = path;
+    });
+
+    return aliases;
   }
 
   public addPlugin(plugin: Plugin, priority: number = 0): void {
@@ -74,7 +95,25 @@ export class Plebpack {
   }
 
   public getPlugins() {
-    return this.plugins;
+    const plugins: PluginSet[] = [];
+
+    this.plugins.forEach((plugin) => {
+      plugins.push(plugin);
+    });
+
+    return plugins
+      .map((plugin, position) => ({ ...plugin, position }))
+      .sort((a, b) => {
+        // Keep the original order if two plugins have the same priority
+        if (a.priority === b.priority) {
+          return (a.position = b.position);
+        }
+
+        // A plugin with a priority of -10 will be placed after one
+        // that has a priority of 0.
+        return b.priority - a.priority;
+      })
+      .map((plugin): Plugin => plugin.plugin);
   }
 
   public addLoader(loader: RuleSetRule): void {
@@ -82,7 +121,13 @@ export class Plebpack {
   }
 
   public getLoaders() {
-    return this.loaders;
+    const loaders: RuleSetRule[] = [];
+
+    this.loaders.forEach((loader) => {
+      loaders.push(loader);
+    });
+
+    return loaders;
   }
 
   public addExtension(extension: string): void {
@@ -90,7 +135,13 @@ export class Plebpack {
   }
 
   public getExtensions() {
-    return this.extensions;
+    const extensions: string[] = [];
+
+    this.extensions.forEach((extension) => {
+      extensions.push(extension);
+    });
+
+    return extensions.length > 0 ? extensions : undefined;
   }
 
   public addResolvePath(path: string): void {
@@ -98,7 +149,13 @@ export class Plebpack {
   }
 
   public getResolvePaths() {
-    return this.resolvePaths;
+    const resolvePaths: string[] = [];
+
+    this.resolvePaths.forEach((path) => {
+      resolvePaths.push(path);
+    });
+
+    return resolvePaths.length > 0 ? resolvePaths : undefined;
   }
 
   public addExternal(name: string, path: string): void {
@@ -110,7 +167,13 @@ export class Plebpack {
   }
 
   public getExternals() {
-    return this.externals;
+    const externals: Record<string, any> = {};
+
+    this.externals.forEach((path: string, name: string) => {
+      externals[name] = path;
+    });
+
+    return externals;
   }
 
   public merge(config: Record<string, any> | Function): void {
@@ -125,14 +188,11 @@ export class Plebpack {
     return this.configs;
   }
 
-  public toConfig(
-    mode: ConfigurationMode,
-    options: Record<string, any>
-  ): Record<string, any> {
-    this.hooks.forEach((hook: Function) => {
-      hook(this);
-    });
+  public config(mode: ConfigurationMode): Record<string, any> {
+    this.hooks.forEach((hook: Hook) => hook(this));
 
-    return new Configuration(this, mode, options).build();
+    const config = new Configuration(this, mode);
+
+    return config.exec();
   }
 }
