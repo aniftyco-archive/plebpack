@@ -6,6 +6,7 @@
   "include": [],
   "references": [
     { "path": "./packages/plebpack" },
-    { "path": "./packages/react" }
+    { "path": "./packages/babel" },
+    { "path": "./packages/postcss" }
   ]
 }

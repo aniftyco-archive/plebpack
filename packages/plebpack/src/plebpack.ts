@@ -1,7 +1,15 @@
 import flatten from 'lodash.flatten';
-import { Output as WebpackOutputOptions, Plugin, RuleSetRule } from 'webpack';
-import { Configuration, ConfigurationMode } from './configuration';
-import { Hook } from './hook';
+import {
+  Output as WebpackOutputOptions,
+  Plugin,
+  Configuration as WebpackConfiguration,
+  RuleSetRule,
+} from 'webpack';
+import FriendlyErrors from 'friendly-errors-webpack-plugin';
+
+export type ConfigurationMode = 'development' | 'production' | 'none';
+
+export type Hook = (plebpack: Plebpack) => void;
 
 export type HookSet = {
   run: Hook;
@@ -15,14 +23,16 @@ export type PluginSet = {
 };
 
 export class Plebpack {
-  private readonly hooks: Set<HookSet> = new Set();
+  public mode: ConfigurationMode = 'development';
+  private debug: boolean = false;
+  private hooks: Set<HookSet> = new Set();
   private context: string = process.cwd();
   private entries: Map<string, string> = new Map();
   private output?: WebpackOutputOptions;
   private aliases: Map<string, string> = new Map();
   private plugins: Set<PluginSet> = new Set();
   private loaders: Set<RuleSetRule> = new Set();
-  private extensions: Set<string> = new Set();
+  private extensions: Set<string> = new Set(['*', '.js', '.json']);
   private resolvePaths: Set<string> = new Set();
   private externals: Map<string, string> = new Map();
   private configs: Set<Function> = new Set();
@@ -31,6 +41,10 @@ export class Plebpack {
 
   public getPkg() {
     return this.pkg;
+  }
+
+  public setDebug(debug: boolean) {
+    this.debug = debug;
   }
 
   public use(...hooks: Hook[]): void {
@@ -193,8 +207,10 @@ export class Plebpack {
     return this.configs;
   }
 
-  public config(mode: ConfigurationMode): Record<string, any> {
+  public config(mode: ConfigurationMode): WebpackConfiguration {
     const hooks: HookSet[] = [];
+
+    this.mode = mode;
 
     this.hooks.forEach((hook) => {
       hooks.push(hook);
@@ -207,8 +223,41 @@ export class Plebpack {
       })
       .forEach((hook: HookSet) => hook.run(this));
 
-    const config = new Configuration(this, mode);
+    this.addPlugin((new FriendlyErrors() as unknown) as Plugin);
 
-    return config.exec();
+    let config: WebpackConfiguration = {
+      mode: this.mode,
+      context: this.getContext(),
+      devtool: 'source-map',
+      entry: this.getEntries(),
+      output: this.getOutput(),
+      module: {
+        rules: this.getLoaders(),
+      },
+      plugins: this.getPlugins(),
+      performance: {
+        hints: false,
+      },
+      resolve: {
+        extensions: this.getExtensions(),
+        alias: this.getAliases(),
+        modules: this.getResolvePaths(),
+      },
+      externals: this.getExternals(),
+    };
+
+    if (this.mode === 'development') {
+      config.devtool = 'inline-source-map';
+    }
+
+    this.getConfigs().forEach((callback: Function) => {
+      config = callback(config);
+    });
+
+    if (this.debug) {
+      console.log(JSON.stringify(config, null, 2));
+    }
+
+    return config;
   }
 }

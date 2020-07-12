@@ -1,6 +1,5 @@
 import { RuleSetRule } from 'webpack';
-import { Plebpack } from '../plebpack';
-import { Hook } from '../hook';
+import { Hook, Plebpack } from '../plebpack';
 
 export function loader(loader: RuleSetRule): Hook {
   return (plebpack: Plebpack): void => {

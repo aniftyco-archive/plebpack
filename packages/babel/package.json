@@ -1,0 +1,30 @@
+{
+  "name": "@plebpack/babel",
+  "description": "Babel hook for Plebpack",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": "aniftyco/plebpack",
+  "author": {
+    "name": "Nifty Development, LLC",
+    "email": "support@aniftyco.com",
+    "url": "https://aniftyco.com"
+  },
+  "contributors": [
+    {
+      "name": "Josh Manders",
+      "url": "https://twitter.com/joshmanders"
+    }
+  ],
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@babel/core": "^7.10.4",
+    "babel-loader": "^8.1.0"
+  },
+  "peerDependencies": {
+    "plebpack": "*"
+  },
+  "devDependencies": {}
+}

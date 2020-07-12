@@ -1,7 +1,7 @@
 {
-  "name": "@plebpack/react",
-  "description": "Run a modern web app",
-  "version": "0.1.1",
+  "name": "@plebpack/postcss",
+  "description": "PostCSS hook for Plebpack",
+  "version": "0.0.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": "aniftyco/plebpack",
@@ -19,7 +19,11 @@
   "files": [
     "lib"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "css-loader": "^3.6.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "postcss-loader": "^3.0.0"
+  },
   "peerDependencies": {
     "plebpack": "*"
   },

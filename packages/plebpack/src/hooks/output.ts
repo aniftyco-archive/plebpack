@@ -1,7 +1,6 @@
 import { basename, dirname, resolve } from 'path';
 import { Output as WebpackOutputOptions } from 'webpack';
-import { Plebpack } from '../plebpack';
-import { Hook } from '../hook';
+import { Hook, Plebpack } from '../plebpack';
 
 export function output(file: string): Hook;
 export function output(options: WebpackOutputOptions): Hook;

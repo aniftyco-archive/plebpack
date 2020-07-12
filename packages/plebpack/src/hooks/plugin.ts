@@ -1,6 +1,5 @@
 import { Plugin } from 'webpack';
-import { Plebpack } from '../plebpack';
-import { Hook } from '../hook';
+import { Hook, Plebpack } from '../plebpack';
 
 export function plugin(plugin: Plugin): Hook;
 export function plugin(plugin: Plugin, priority: number = 0): Hook {
