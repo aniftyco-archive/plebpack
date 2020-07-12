@@ -8,9 +8,15 @@ _webpack.config.ts_
 
 ```ts
 import config, { entry, output } from 'plebpack';
+import babel from '@plebpack/babel';
 
-config.use(entry('./example/index.js'));
-config.use(output('./example/[name].js'));
+config.use(entry('./src/index.ts'));
+config.use(output('./public/[name].js'));
+config.use(
+  babel({
+    presets: ['@babel/preset-env', '@babel/preset-typescript'],
+  })
+);
 
 export default config;
 ```
