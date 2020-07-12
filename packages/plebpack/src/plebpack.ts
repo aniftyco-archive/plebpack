@@ -1,50 +1,35 @@
 import flatten from 'lodash.flatten';
-import {Output as IWebpackOutputOptions, Plugin, RuleSetRule} from 'webpack';
-import {Configuration, ConfigurationMode} from './configuration';
+import { Output as WebpackOutputOptions, Plugin, RuleSetRule } from 'webpack';
+import { Configuration, ConfigurationMode } from './configuration';
 
-export interface IOutputOptions extends IWebpackOutputOptions {
+export type OutputOptions = WebpackOutputOptions & {
   path: string;
   filename: string;
-}
+};
 
-export interface IGenericObject {
-  [key: string]: any;
-}
-
-export interface IPlebpack {
-  context: string;
-  use(...hooks: Function[]): void;
-  addEntry(name: string, path: string): void;
-  setOutput(options: IOutputOptions): void;
-  setContext(context: string): void;
-  addAlias(alias: string, path: string): void;
-  addPlugin(plugin: Plugin, priority: number): void;
-  addLoader(loader: RuleSetRule): void;
-  addExtension(extension: string): void;
-  addExternal(name: string, path: string): void;
-  addResolvePath(path: string): void;
-  merge(config: IGenericObject | Function): void;
-}
-
-export interface IPluginSet {
+export type PluginSet = {
   plugin: Plugin;
   priority: number;
-}
+};
 
-export class Plebpack implements IPlebpack {
+export class Plebpack {
   private readonly hooks: Set<Function> = new Set();
   public context: string = process.cwd();
-  public entries: Map<string, string> = new Map();
-  public output?: IOutputOptions;
-  public aliases: Map<string, string> = new Map();
-  public plugins: Set<IPluginSet> = new Set();
-  public loaders: Set<RuleSetRule> = new Set();
-  public extensions: Set<string> = new Set();
-  public resolvePaths: Set<string> = new Set();
-  public externals: Map<string, string> = new Map();
-  public configs: Set<Function> = new Set();
+  private entries: Map<string, string> = new Map();
+  private output?: OutputOptions;
+  private aliases: Map<string, string> = new Map();
+  private plugins: Set<PluginSet> = new Set();
+  private loaders: Set<RuleSetRule> = new Set();
+  private extensions: Set<string> = new Set();
+  private resolvePaths: Set<string> = new Set();
+  private externals: Map<string, string> = new Map();
+  private configs: Set<Function> = new Set();
 
-  constructor(public pkg?: string | null) {}
+  constructor(private pkg?: string | null) {}
+
+  public getPkg() {
+    return this.pkg;
+  }
 
   public use(...hooks: Function[]): void {
     flatten(hooks).forEach((hook: Function) => {
@@ -60,8 +45,16 @@ export class Plebpack implements IPlebpack {
     this.entries.set(name, path);
   }
 
-  public setOutput(output: IOutputOptions) {
+  public getEntries() {
+    return this.entries;
+  }
+
+  public setOutput(output: OutputOptions) {
     this.output = output;
+  }
+
+  public getOutput() {
+    return this.output;
   }
 
   public setContext(context: string) {
@@ -72,19 +65,40 @@ export class Plebpack implements IPlebpack {
     this.aliases.set(alias, path);
   }
 
+  public getAliases() {
+    return this.aliases;
+  }
+
   public addPlugin(plugin: Plugin, priority: number = 0): void {
-    this.plugins.add({plugin, priority});
+    this.plugins.add({ plugin, priority });
+  }
+
+  public getPlugins() {
+    return this.plugins;
   }
 
   public addLoader(loader: RuleSetRule): void {
     this.loaders.add(loader);
   }
 
+  public getLoaders() {
+    return this.loaders;
+  }
+
   public addExtension(extension: string): void {
     this.extensions.add(extension);
   }
+
+  public getExtensions() {
+    return this.extensions;
+  }
+
   public addResolvePath(path: string): void {
     this.resolvePaths.add(path);
+  }
+
+  public getResolvePaths() {
+    return this.resolvePaths;
   }
 
   public addExternal(name: string, path: string): void {
@@ -95,15 +109,26 @@ export class Plebpack implements IPlebpack {
     this.externals.set(name, path);
   }
 
-  public merge(config: IGenericObject | Function): void {
+  public getExternals() {
+    return this.externals;
+  }
+
+  public merge(config: Record<string, any> | Function): void {
     if (typeof config === 'function') {
       this.configs.add(config);
     }
 
-    this.configs.add((c: IGenericObject) => ({...c, ...config}));
+    this.configs.add((c: Record<string, any>) => ({ ...c, ...config }));
   }
 
-  public toConfig(mode: ConfigurationMode, options: IGenericObject): IGenericObject {
+  public getConfigs() {
+    return this.configs;
+  }
+
+  public toConfig(
+    mode: ConfigurationMode,
+    options: Record<string, any>
+  ): Record<string, any> {
     this.hooks.forEach((hook: Function) => {
       hook(this);
     });

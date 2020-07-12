@@ -2,8 +2,8 @@
 coverage
 
 # Ignore compiled output
-packages/**/dist
-examples/**/dist
+packages/**/lib
+examples/**/lib
 
 # TypeScript incremental compilation cache
 *.tsbuildinfo

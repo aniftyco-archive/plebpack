@@ -1,54 +1,72 @@
 import FriendlyErrors from 'friendly-errors-webpack-plugin';
-import {Configuration as WebpackConfiguration, Output, Plugin, RuleSetRule} from 'webpack';
-import {Plebpack} from './plebpack';
+import {
+  Output,
+  Plugin,
+  RuleSetRule,
+  Configuration as WebpackConfiguration,
+} from 'webpack';
+import { Plebpack } from './plebpack';
 
 export type ConfigurationMode = 'development' | 'production' | 'none';
 
 export class Configuration {
-  constructor(protected config: Plebpack, protected mode: ConfigurationMode, protected options: object) {
-    this.config.addPlugin(new FriendlyErrors());
+  constructor(
+    protected config: Plebpack,
+    protected mode: ConfigurationMode,
+    protected options: object
+  ) {
+    this.config.addPlugin((new FriendlyErrors() as unknown) as Plugin);
   }
 
-  private entry(): any {
-    if (this.config.entries.size < 1) {
+  private entry() {
+    const entries = this.config.getEntries();
+
+    if (entries.size < 1) {
       throw new Error('No entry specified.');
     }
 
     const entry: any = {};
 
-    this.config.entries.forEach((path: string, name: string) => {
+    entries.forEach((path: string, name: string) => {
       entry[name] = path;
     });
 
     return entry;
   }
 
-  private output(): Output {
-    if (!this.config.output) {
+  private output() {
+    const output: Output | undefined = this.config.getOutput();
+
+    if (!output) {
       throw new Error('No output specified.');
     }
 
-    return this.config.output;
+    return output;
   }
 
-  private rules(): RuleSetRule[] {
+  private rules() {
     const loaders: RuleSetRule[] = [];
 
-    this.config.loaders.forEach((loader) => {
+    this.config.getLoaders().forEach((loader) => {
       loaders.push(loader);
     });
 
     return loaders;
   }
 
-  private plugins(): Plugin[] {
-    const plugins: any[] = [];
+  private plugins() {
+    const plugins: {
+      plugin: Plugin;
+      priority: number;
+      position?: number;
+    }[] = [];
 
-    this.config.plugins.forEach((plugin, position) => {
-      plugins.push({...plugin, position});
+    this.config.getPlugins().forEach((plugin) => {
+      plugins.push(plugin);
     });
 
     return plugins
+      .map((plugin, position) => ({ ...plugin, position }))
       .sort((a, b) => {
         // Keep the original order if two plugins have the same priority
         if (a.priority === b.priority) {
@@ -59,13 +77,13 @@ export class Configuration {
         // that has a priority of 0.
         return b.priority - a.priority;
       })
-      .map((plugin) => plugin.plugin);
+      .map((plugin) => plugin.plugin) as Plugin[];
   }
 
-  private extensions(): string[] {
+  private extensions() {
     const extensions: string[] = [];
 
-    this.config.extensions.forEach((extension) => {
+    this.config.getExtensions().forEach((extension) => {
       extensions.push(extension);
     });
 
@@ -75,7 +93,7 @@ export class Configuration {
   private aliases(): any {
     const aliases: any = {};
 
-    this.config.aliases.forEach((path: string, name: string) => {
+    this.config.getAliases().forEach((path: string, name: string) => {
       aliases[name] = path;
     });
 
@@ -85,7 +103,7 @@ export class Configuration {
   private externals(): any {
     const externals: any = {};
 
-    this.config.externals.forEach((path: string, name: string) => {
+    this.config.getExternals().forEach((path: string, name: string) => {
       externals[name] = path;
     });
 
@@ -95,7 +113,7 @@ export class Configuration {
   private modules(): string[] {
     const modules: string[] = [];
 
-    this.config.resolvePaths.forEach((path) => {
+    this.config.getResolvePaths().forEach((path) => {
       modules.push(path);
     });
 
@@ -128,9 +146,11 @@ export class Configuration {
       config.devtool = 'inline-source-map';
     }
 
-    this.config.configs.forEach((callback: Function) => {
+    this.config.getConfigs().forEach((callback: Function) => {
       config = callback(config);
     });
+
+    console.log(config);
 
     return config;
   }

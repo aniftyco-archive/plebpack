@@ -1,5 +1,5 @@
-import {IPlebpack} from '../plebpack';
+import { Plebpack } from '../plebpack';
 
-export default (path: string): Function => (plebpack: IPlebpack): void => {
+export default (path: string): Function => (plebpack: Plebpack): void => {
   plebpack.setContext(path);
 };

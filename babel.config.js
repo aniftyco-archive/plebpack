@@ -4,19 +4,18 @@ module.exports = (babel) => {
   return {
     presets: [
       [
-        '@babel/env',
+        '@babel/plugin-env',
         {
           targets: {
             node: 'current',
           },
         },
       ],
-      '@babel/typescript',
+      '@babel/plugin-typescript',
     ],
     plugins: [
       ['@babel/proposal-object-rest-spread', {useBuiltIns: true}],
       ['@babel/proposal-class-properties'],
-      'add-module-exports',
     ],
   };
 };

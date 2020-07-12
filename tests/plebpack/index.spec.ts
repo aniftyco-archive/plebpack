@@ -1,7 +1,7 @@
-import {resolve} from 'path';
-import {Configuration as WebpackConfiguration} from 'webpack';
+import { resolve } from 'path';
+import { Configuration as WebpackConfiguration } from 'webpack';
 import config from '../../packages/plebpack/src';
-import {Plebpack} from '../../packages/plebpack/src/plebpack';
+import { Plebpack } from '../../packages/plebpack/src/plebpack';
 
 describe('index', () => {
   it('should return a function', () => {
@@ -15,7 +15,7 @@ describe('index', () => {
   it('should return configuration object', () => {
     config.use((plebpack: Plebpack) => {
       plebpack.addEntry('foo', 'path/to/foo.js');
-      plebpack.setOutput({filename: 'bar', path: 'path/to/bar.js'});
+      plebpack.setOutput({ filename: 'bar', path: 'path/to/bar.js' });
     });
 
     const webpackConfig: WebpackConfiguration = {

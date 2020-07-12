@@ -1,6 +1,8 @@
-import {RuleSetRule} from 'webpack';
-import {IPlebpack} from '../plebpack';
+import { RuleSetRule } from 'webpack';
+import { Plebpack } from '../plebpack';
 
-export default (loader: RuleSetRule): Function => (plebpack: IPlebpack): void => {
+export default (loader: RuleSetRule): Function => (
+  plebpack: Plebpack
+): void => {
   plebpack.addLoader(loader);
 };

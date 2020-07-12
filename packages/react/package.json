@@ -2,8 +2,8 @@
   "name": "@plebpack/react",
   "description": "Run a modern web app",
   "version": "0.1.1",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "aniftyco/plebpack",
   "author": {
     "name": "Nifty Development, LLC",
@@ -17,7 +17,7 @@
     }
   ],
   "files": [
-    "./dist/"
+    "lib"
   ],
   "dependencies": {},
   "peerDependencies": {

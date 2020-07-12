@@ -4,5 +4,8 @@
   },
   "files": [],
   "include": [],
-  "references": [{"path": "./packages/plebpack"}, {"path": "./packages/create-react-app"}]
+  "references": [
+    { "path": "./packages/plebpack" },
+    { "path": "./packages/react" }
+  ]
 }

@@ -1,4 +1,4 @@
-import {Plebpack} from '../../packages/plebpack/src/plebpack';
+import { Plebpack } from '../../packages/plebpack/src/plebpack';
 
 describe('Plebpack', () => {
   it('should be an instance of Plebpack', () => {
