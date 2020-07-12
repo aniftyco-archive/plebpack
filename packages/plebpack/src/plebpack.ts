@@ -3,6 +3,11 @@ import { Output as WebpackOutputOptions, Plugin, RuleSetRule } from 'webpack';
 import { Configuration, ConfigurationMode } from './configuration';
 import { Hook } from './hook';
 
+export type HookSet = {
+  run: Hook;
+  position: number;
+};
+
 export type PluginSet = {
   plugin: Plugin;
   priority: number;
@@ -10,7 +15,7 @@ export type PluginSet = {
 };
 
 export class Plebpack {
-  private readonly hooks: Set<Hook> = new Set();
+  private readonly hooks: Set<HookSet> = new Set();
   private context: string = process.cwd();
   private entries: Map<string, string> = new Map();
   private output?: WebpackOutputOptions;
@@ -29,8 +34,8 @@ export class Plebpack {
   }
 
   public use(...hooks: Hook[]): void {
-    flatten(hooks).forEach((hook: Hook) => {
-      this.hooks.add(hook);
+    flatten(hooks).forEach((hook: Hook, position) => {
+      this.hooks.add({ run: hook, position });
     });
   }
 
@@ -189,7 +194,18 @@ export class Plebpack {
   }
 
   public config(mode: ConfigurationMode): Record<string, any> {
-    this.hooks.forEach((hook: Hook) => hook(this));
+    const hooks: HookSet[] = [];
+
+    this.hooks.forEach((hook) => {
+      hooks.push(hook);
+    });
+
+    hooks
+      // Make sure hooks run in order they were added.
+      .sort((a: HookSet, b: HookSet) => {
+        return a.position - b.position;
+      })
+      .forEach((hook: HookSet) => hook.run(this));
 
     const config = new Configuration(this, mode);
 
