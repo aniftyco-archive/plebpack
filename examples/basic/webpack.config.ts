@@ -1,10 +1,14 @@
 import config, { entry, output } from 'plebpack';
 import babel from '@plebpack/babel';
 import postcss from '@plebpack/postcss';
+import devServer from '@plebpack/devserver';
 import * as tailwind from 'tailwindcss';
 
 config.use(entry('./src/index.tsx'));
 config.use(output('./public/[name].js'));
+
+config.use(devServer());
+
 config.use(
   babel({
     presets: [
@@ -14,6 +18,7 @@ config.use(
     ],
   })
 );
+
 config.use(
   postcss(
     {
