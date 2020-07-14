@@ -1,7 +1,7 @@
 {
   "name": "@plebpack/devserver",
   "description": "DevServer hook for Plebpack",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": "aniftyco/plebpack",
