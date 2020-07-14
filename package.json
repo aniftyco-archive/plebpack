@@ -13,10 +13,7 @@
     }
   ],
   "scripts": {
-    "prebuild": "rimraf packages/**/lib",
     "build": "tsc --build tsconfig.build.json",
-    "prepublishOnly": "yarn build",
-    "publish": "lerna publish",
     "test": "jest"
   },
   "workspaces": [
@@ -46,7 +43,6 @@
     "lerna": "^3.22.1",
     "mkdirp": "^1.0.4",
     "prettier": "^2.0.5",
-    "rimraf": "^3.0.2",
     "string-length": "^4.0.1",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
