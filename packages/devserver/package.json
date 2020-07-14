@@ -19,6 +19,9 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "webpack-dev-server": "^3.11.0"
   },
