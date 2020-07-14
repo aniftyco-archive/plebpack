@@ -1,7 +1,7 @@
 {
   "name": "@plebpack/babel",
   "description": "Babel hook for Plebpack",
-  "version": "0.0.0",
+  "version": "0.2.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": "aniftyco/plebpack",
@@ -28,6 +28,5 @@
   },
   "peerDependencies": {
     "plebpack": "*"
-  },
-  "devDependencies": {}
+  }
 }
