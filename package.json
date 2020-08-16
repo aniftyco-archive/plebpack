@@ -20,6 +20,32 @@
     "packages/*",
     "examples/*"
   ],
+  "eslintConfig": {
+    "extends": "nifty",
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/no-inferrable-types": "off"
+    }
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "./tests/tsconfig.json"
+      }
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
